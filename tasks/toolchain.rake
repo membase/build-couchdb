@@ -2,12 +2,33 @@
 
 require 'tmpdir'
 require 'fileutils'
+require 'net/http'
+
+def download_autoconf(version)
+  olddir = Dir::getwd
+  Dir::chdir 'dependencies'
+
+  return if File.directory? "autoconf-#{version}"
+
+  puts "Downloading autoconf #{version}"
+  Net::HTTP.start("ftp.gnu.org") do |http|
+    resp = http.get("/gnu/autoconf/autoconf-#{version}.tar.gz")
+    IO.popen("tar xzf -", "wb") do |pipe|
+      pipe.write(resp.body)
+    end
+  end
+ensure
+  Dir::chdir olddir
+end
 
 namespace :toolchain do
 
   autotools_versions = %w[ 2.13 2.59 ]
 
+  autotools_versions.each { |v| download_autoconf v }
+
   autotools_versions.each do |version|
+
     label = "AUTOCONF_#{version.gsub(/\W/, '')}"
     raise "Woah, why am I bothering to build autoconf #{version}? There is no #{label} constant" unless Object.const_defined? label
 
