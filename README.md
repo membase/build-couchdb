@@ -113,13 +113,19 @@ On **Mac OS X**, install Xcode.
 
 ## Getting the Code
 
-You will need the Git tool. Check out the code and pull in the third-party
-submodules.
+You will need the Git tool and google's [repo][repo].
 
-    git clone git://github.com/couchone/build-couchdb
-    cd build-couchdb
-    git submodule init
-    git submodule update
+### Install Repo
+
+    $ curl http://android.git.kernel.org/repo > ~/bin/repo
+    $ chmod a+x ~/bin/repo
+
+### Set Up the Tree
+
+    $ mkdir couchdb
+    $ cd couchdb
+    $ repo init -u git://github.com/membase/couchdb-manifest.git
+    $ repo sync
 
 ## How to Build CouchDB
 
