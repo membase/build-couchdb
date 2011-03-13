@@ -98,6 +98,10 @@ namespace :couchdb do
   plugins = (ENV['plugin'] || "") + "," + (ENV['plugins'] || "")
   plugins = plugins.split(',').map{|x| x.strip}.select{|x| ! x.empty? }
 
+  if File.exists? "#{DEPS}/geocouch/Makefile"
+    plugins << "#{DEPS}/geocouch"
+  end
+
   unless plugins.empty?
     puts "Setting otp_keep=\"*\" for building plugins"
     ENV['otp_keep'] = '*'
